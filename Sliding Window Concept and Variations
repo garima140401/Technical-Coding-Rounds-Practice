@@ -1,0 +1,135 @@
+//Implementation of Sliding Window Concepts with different Questions:
+
+1. Maximum sum subarray of size k. Fixed sliding window(when window size is given):
+class Solution{
+public int maxSumSubarray(int[] arr,int k ){
+//edge case:
+if(arr.length>k){
+return -1;
+}
+int sum =0;
+//for the first window:
+for(int i=0; i<k; i++){
+sum+=arr[i];
+}
+int max=sum;
+//for sliding the window:
+for(int i=k; i<arr.length; i++){
+sum+=arr[i]-arr[i-k];
+max= Math.max(max, sum);
+}
+return max;
+}
+}
+
+2.Minimum sum subarray of size k:
+class Solution{
+public int minSumSubarray(int[] arr,int k ){
+//edge case:
+if(arr.length>k){
+return -1;
+}
+int sum =0;
+//for the first window:
+for(int i=0; i<k; i++){
+sum+=arr[i];
+}
+int min=sum;
+//for sliding the window:
+for(int i=k; i<arr.length; i++){
+sum+=arr[i]-arr[i-k];
+min= Math.min(min, sum);
+}
+return min;
+}
+}
+
+3. Longest substring without repeating characters: it's a variable sliding window (substring, subarray):
+class Solution{
+public int longestSubstring(String s){
+//make hashset:
+HashSet<Character> set= new HashSet<>();
+int left=0;
+int maxlen=0;
+for(int right=0; right<s.length(); right++){
+while(set.contains(s.charAt(right))){
+set.remove(s.charAt(left));
+left++;
+}
+set.add(s.charAt(right));
+maxlen= Math.max(maxlen, right-left+1);
+}
+return maxlen;
+}
+}
+
+4. Given a string s and an integer k, find the length of the longest substring with atmost k unique characters:
+// here we have to use hashmap because along with character we have to map the count of the character as well:
+class Solution{
+public int longestSubstringExact(String s, int k){
+HashMap<Character, Integer> map= new HashMap<>();
+int maxlen=0;
+int left=0;
+for(int right=0; right<s.length(); right++){
+char ch = s.charAt(right);
+map.put(ch, map.getOrDefault(ch, 0)+1); //adding character in map and the value 
+
+while(map.size()>k){
+char leftchar= s.charAt(left);
+map.put(leftchar, map.get((leftchar)-1)); //if mapsize exceeds then start decreasing one one character from leftside 
+
+if(map.get(leftchar)==0){// if count of char at left becomes 0 then remove that character from map.
+map.remove(leftchar);
+}
+left++;
+}
+maxlen=Math.max(maxlen, right-left+1);//update maxlen.
+}
+return maxlen;
+}
+}
+
+5.Given a string s and an integer k, find the length of the longest substring with exactly k unique characters:
+// here we have to use hashmap because along with character we have to map the count of the character as well:
+class Solution{
+public int longestSubstringExact(String s, int k){
+HashMap<Character, Integer> map= new HashMap<>();
+int maxlen=0;
+int left=0;
+for(int right=0; right<s.length(); right++){
+char ch = s.charAt(right);
+map.put(ch, map.getOrDefault(ch, 0)+1); //adding character in map and the value 
+
+while(map.size()>k){
+char leftchar= s.charAt(left);
+map.put(leftchar, map.get((leftchar)-1)); //if mapsize exceeds then start decreasing one one character from leftside 
+
+if(map.get(leftchar)==0){// if count of char at left becomes 0 then remove that character from map.
+map.remove(leftchar);
+}
+left++;
+}
+if(map.size()==k){
+maxlen=Math.max(maxlen, right-left+1);//update maxlen.
+}
+}
+return maxlen;
+}
+}
+
+6. Kadane algorithm: 
+// for this, we have to make two variables, one currentsum and one maxsum:
+//main crux: until the sum remains positive, expand the window, and when it becomes negative restart again:
+class Solution{
+public int kadaneAlgo(int[] arr){
+int currentSum= arr[0];
+int maxSum= arr[0];
+for(int i=1; i<arr.length; i++){
+currentSum = Math.max(arr[i], currentSum+arr[i]);
+
+//update max:
+maxSum = Math.max(maxSum, currentSum);
+}
+return maxSum;
+}
+}
