@@ -1,0 +1,30 @@
+// Remove duplicates for sorted array: Main Crux: New element mila shift it.
+class Solution{
+public int removeDuplicates(int [] arr){
+int i=0;
+for(int j=1; j<arr.length; j++){
+if(arr[j]!=arr[i]){
+i++;
+arr[i]= arr[j];
+}
+}
+return i+1;
+}
+}
+
+//remove duplicates for unsorted array: use hashset here:
+class Solution{
+public List<Integer> removeDuplicates(int[] arr){
+//hashset:
+HashSet<Integer> set= new HashSet<>();
+List<Integer> result= new ArrayList<>();
+int left=0;
+for(int right=0; right<arr.length; right++){
+if(!set.contains(arr[right])){
+set.add(arr[right]);
+result.add(arr[right]);
+}
+}
+return result;
+}
+}
